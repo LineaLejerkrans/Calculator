@@ -1,16 +1,15 @@
-let input = [];
-let index = 0;
+let input = []; //to store the numbers and signs you click on
+let index = 0; //the order of the neumbers 
 let number = 0;
-let elem = document.getElementById('display');
-let pers = 0;
+let elem = document.getElementById('display'); //get the value of the input tag, so you can change what's on the display
 
-document.querySelectorAll(".key").forEach(
+document.querySelectorAll(".key").forEach( //every element that has the class "key" 
     el => { 
-        el.addEventListener('click', () => handleClick(el.id))
+        el.addEventListener('click', () => handleClick(el.id)) //adds a listner, that waits for a "click" and when "click" it calls the function handleClick with the id of the button you cliked on
 });
 
-function handleClick(keyId){
-    switch (keyId) {
+function handleClick(keyId){ //recives the id 
+    switch (keyId) { //checks for which id
         case '0':
             //fix so you can't add more zeros unless it's another number before it
         case '1':
@@ -34,8 +33,8 @@ function handleClick(keyId){
             break;
         
         case 'percent':
-            pers = number*0.01;
-            elem.value = pers;
+            number = number*0.01;
+            elem.value = number;
             break;
         
         case 'negate':
