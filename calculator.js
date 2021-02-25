@@ -15,7 +15,7 @@ console.log(elem.value);
     switch (keyId) { //checks for which id
         case '0':
             if (elem.value != 0){
-                input[index++]=parseInt(keyId);
+                input[index++]=(keyId);  //parseInt
                 elem.value = input.join(""); // elem.value is the number that shows on the calculator, join is a function that returns al the elements in the array, 
                 //the "" means that there shoudn't be any space between them
                 number = input.join("");
@@ -31,9 +31,11 @@ console.log(elem.value);
         case '8': 
         case '9':   
             // This will happen if you press either of the numbers above except zero
-            input[index++]=parseInt(keyId); 
+            input[index++]=(keyId);                
             elem.value = input.join(""); 
             number = input.join("");
+                                                
+           
             break;
 
         case 'clear':   
@@ -61,13 +63,9 @@ console.log(elem.value);
 
         case 'divide':
             input[index++]= '/';
-            elem.value = input.join("")+'1'; 
-          
-        
-        
-            /*for (let i=0; i<input.length; i++){
-                if(input.includes("1");)
-            }*/
+            
+            
+            
             break;
     }
 }
