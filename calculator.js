@@ -4,13 +4,13 @@ let index = 0; // to decide which field in the array that should be active
 let elem = document.getElementById('display'); //get the value of the input tag, so you can change what's on the display
 let calc = false; // to track if you press multiple operators after each other
 let checkCalc = true; // to track if you called the function calculate by pressing equal or pressing another operator like 2+2+
+let checkEqual = true; // when you get a number after pressing equal and after you press the dot or precent for example you don't want the number to disappear
  
 function numbers(keyId){
    if ((''+input[index]).length<18){ // it will only print a maximum of 18 digits
        if (!(input[index]=='0' && keyId == '0')){ // so you can't write multiple zeros at the start
-           if (calc && checkCalc){ // if you have done a calculation and press a new numbers you want to erase the old numbers in the array, but this can only happen if you called the function calculate by pressing equal
+           if (calc && checkCalc && checkEqual){ // if you have done a calculation and press a new numbers you want to erase the old numbers in the array, but this can only happen if you called the function calculate by pressing equal
                input[0] = "";
-               calc = false;
            }
            if (input[index] == '0'){ // if you press 0 than for exampel 2 you don't want it to write 02 but just 2
                input[index] = "";
@@ -36,6 +36,7 @@ function check(){ // checks how many digits the number have and if it's more tha
 function operator(keyId){
    calc = false;
    checkCalc = true;
+   checkEqual = true;
    if (input[0] != "" && input[1] != "") { // if you have numbers in both positions than you will automatically calculate them if you were to press a new operator before clicking equal
        calculate();
        checkCalc = false; // this means you called calculate by pressing an operator and not by clicking equal so you don't want to erase the numbers in the first position
@@ -73,11 +74,15 @@ function calculate(){
            
        break;
        }
+
+       if ( input[index] == ""){
+           elem.value = "Error"
+       }
  
        if (elem.value != "Error"){
            if ((''+result).length>15) {
                elem.style.fontSize = '20px';  
-               result = result.toFixed(15); // to limit how many decimals the result can have, because otherwise it does some weird things sometimes
+               result = result.toFixed(14); // to limit how many decimals the result can have, because otherwise it does some weird things sometimes
            }
            else {
                elem.style.fontSize = '28px';
@@ -93,33 +98,38 @@ function calculate(){
 }
 
 function handleClick(keyId){ //receives the id
-   if (keyId == 'dot'){
-       if (!input[index].includes(".")){ // if there is already a dot in the number you don't want to add another
-           input[index] = input[index] + '.';
-           elem.value = input[index];
-       }
-      
-   }
-   else if (keyId =='negate') {
-       input[index] = (-parseFloat(input[index])).toString(); // you convert what you have in the array to a float than make it negative and then convert it back to a string
-       elem.value = input[index];
-   }
-   else if (keyId == 'percent') {
-       input[index] = (0.01*parseFloat(input[index])).toString(); // same here only that you take the number times 0.01
-       elem.value = input[index];
-   }
-   else if (keyId == 'clear') {
-       location.reload(); // Reloads the page
-   }
-   else if (!isNaN(parseInt(keyId))){ // if what you press is a number than the numbers function will be called
-       numbers(keyId);
-   }
-   else if (keyId == 'equal'){ // if you press equal than the calculate function is called
-       calculate();
-   }
-   else { // if the keyid is neither of the ones above than it's an operator
-       operator(keyId);
-   }
+    if (keyId == 'dot'){
+        if (!input[index].includes(".")){ // if there is already a dot in the number you don't want to add another
+            input[index] = input[index] + '.';
+            elem.value = input[index];
+            checkEqual = false;
+        }
+        
+    }
+    else if (keyId =='negate') {
+        input[index] = (-parseFloat(input[index])).toString(); // you convert what you have in the array to a float than make it negative and then convert it back to a string
+        elem.value = input[index];
+        checkEqual = false;
+    }
+    else if (keyId == 'percent') {
+        input[index] = (0.01*parseFloat(input[index])).toString(); // same here only that you take the number times 0.01
+        elem.value = input[index];
+        checkEqual = false;
+    }
+    else if (keyId == 'clear') {
+        location.reload(); // Reloads the page
+    }
+    else if (!isNaN(parseInt(keyId))){ // if what you press is a number than the numbers function will be called
+        numbers(keyId);
+    }
+    else if (keyId == 'equal'){ // if you press equal than the calculate function is called
+        if (!calc) { // if you have just pressed equal nothing will happen if you press it again
+            calculate();
+        }
+    }
+    else { // if the keyid is neither of the ones above than it's an operator
+        operator(keyId);
+    }
 }
    document.querySelectorAll(".key").forEach( //every element that has the class "key"
    el => {
@@ -127,8 +137,3 @@ function handleClick(keyId){ //receives the id
        //it calls the function handleClick with the id of the button you clicked on
 });
 
-
-
-// if you press 0 once it will show it on the screen but if you try pressing it agian nothing more 
-// will show which is what I want, but if you press zero than two it will show 02 on the screen 
-// which I don't want
