@@ -48,7 +48,7 @@ function operator(keyId){
   signs = keyId; // put the id of the operator in an array, it will only remember the last operator you clicked on, if you were to click twice at an operator
   console.log(signs);
 }
- 
+
 function calculate(){
   let result = 0;
   x = parseFloat(input[0]); // convert the array which is a string to a float
@@ -76,11 +76,12 @@ function calculate(){
       break;
       }
  
-      if ( input[index] == ""){
+      if (input[index] == ""){ // if you try to do a calculation when one of the positions is empty it will show error
           elem.value = "Error"
       }
+
       if (elem.value != "Error"){
-          if ((''+result).length>15) {
+          if ((''+result).length>15) { // to change the font of the result
               elem.style.fontSize = '20px'; 
               result = result.toFixed(14); // to limit how many decimals the result can have, because otherwise it does some weird things sometimes
           }
